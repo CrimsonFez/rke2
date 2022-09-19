@@ -1,0 +1,28 @@
+---
+- name: Create RKE2 Server Config Directory
+  ansible.builtin.file:
+    state: directory
+    path: /etc/rancher/rke2
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Copy RKE2 config
+  ansible.builtin.template:
+    src: "rke2-config.yaml.j2"
+    dest: /etc/rancher/rke2/config.yaml
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Start RKE2 service on the first server
+  ansible.builtin.systemd:
+    name: "rke2-server.service"
+    state: started
+    enabled: true
+
+- name: Mask RKE2 agent service on the first server
+  ansible.builtin.systemd:
+    name: "rke2-agent.service"
+    enabled: false
+    masked: true

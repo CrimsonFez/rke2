@@ -1,0 +1,12 @@
+---
+# tasks file for rke2
+- name: Download and install RKE2 {{ rke2_version }}
+  ansible.builtin.include_tasks: install.yaml
+
+- name: Setup RKE2 Servers
+  ansible.builtin.include_tasks: server-setup.yaml
+  when: rke2_node_type == 'server'
+
+- name: Setup RKE2 Agents
+  ansible.builtin.include_tasks: agent-setup.yaml
+  when: rke2_node_type == 'agent'

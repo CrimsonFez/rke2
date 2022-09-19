@@ -1,0 +1,7 @@
+write-kubeconfig-mode: "0644"
+server: https://{{ site_rke2_api_domain }}:9345
+token: {{ rke2_token }}
+tls-san:
+  - {{ site_rke2_api_domain }}
+  - {{ site_rke2_api_ip }}
+cni: {{ rke2_cni }}

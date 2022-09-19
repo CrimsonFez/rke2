@@ -1,0 +1,11 @@
+---
+### defaults file for rke2
+rke2_version: v1.24.4+rke2r1
+rke2_install_script_dir: /var/tmp
+rke2_install_bash_url: https://get.rke2.io
+rke2_data_path: /var/lib/rancher/rke2
+### maybe want to change these
+# when set to true this sets the proper taints on server nodes
+rke2_server_ha: True
+rke2_token: SuperSecretPassword!
+rke2_cni: canal

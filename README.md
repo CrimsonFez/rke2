@@ -71,14 +71,16 @@ rke2_node_type=agent
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
     - hosts: "cluster"
       roles:
-        - rke2
+        - rke2_ansible
       vars:
-        site_rke2_api_domain: cluster.local
-        site_rke2_api_ip: 192.168.100.100
+        rke2_server_ha: False
+        rke2_token: SuperSecretPassword!
+        rke2_cni: canal
+        rke2_api_domain: cluster.local
+        rke2_api_ip: 192.168.100.100
+        rke2_disable: rke2-ingress-nginx
 
 License
 -------

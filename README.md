@@ -1,38 +1,86 @@
-Role Name
+RKE2
 =========
 
-A brief description of the role goes here.
-
-Requirements
-------------
-
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+A basic installer for RKE2 Kubernetes
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+### defaults file for rke2
+rke2_version: v1.24.4+rke2r1
+rke2_install_script_dir: /var/tmp
+rke2_install_bash_url: https://get.rke2.io
+rke2_data_path: /var/lib/rancher/rke2
 
-Dependencies
-------------
+### maybe want to change these
+# when set to true this configures the servers in a cluster. You must also set the rke2_first_server variable on a server
+rke2_server_ha: False
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+# set the token here 
+rke2_token: SuperSecretPassword!
+
+# choosing the CNI used
+rke2_cni: 'canal' or 'calico' or 'flannel' or 'cilium'
+
+# the domain and ip that points to your server nodes
+rke2_api_domain: cluster.local
+rke2_api_ip: 192.168.100.100
+
+### The following variables are applied to nodes
+# choose the node type
+rke2_node_type: 'server' or 'agent'
+
+# When running HA server nodes set this on your first server. This will preform first time setup on that node.
+rke2_first_server: True
+
+# set this on nodes you don't want to run pods
+rke2_node_taint: True
+
+# disable integrated charts. 
+rke2_disable: 'rke2-ingress-nginx' 
+
+Example Inventory
+-----------------
+
+[cluster]
+master rke2_node_type=server rke2_node_taint=True
+worker01 rke2_node_type=agent
+worker02 rke2_node_type=agent
+
+[ha_cluster:children]
+ha_servers
+agents
+
+[ha_servers]
+master01 rke2_first_server=True
+master02
+master03
+
+[ha_servers:vars]
+rke2_node_type=server
+rke2_node_taint=True
+
+[agents]
+worker01
+worker02
+worker03
+
+[agents:vars]
+rke2_node_type=agent
 
 Example Playbook
 ----------------
 
 Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
-    - hosts: servers
+    - hosts: "cluster"
       roles:
-         - { role: username.rolename, x: 42 }
+        - rke2
+      vars:
+        site_rke2_api_domain: cluster.local
+        site_rke2_api_ip: 192.168.100.100
 
 License
 -------
 
-BSD
-
-Author Information
-------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+MIT

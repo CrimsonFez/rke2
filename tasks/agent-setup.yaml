@@ -20,9 +20,3 @@
     name: "rke2-agent.service"
     state: started
     enabled: true
-
-- name: Mask RKE2 server service
-  ansible.builtin.systemd:
-    name: "rke2-server.service"
-    enabled: false
-    masked: true

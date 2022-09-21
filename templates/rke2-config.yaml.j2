@@ -1,7 +1,16 @@
 write-kubeconfig-mode: "0644"
-server: https://{{ site_rke2_api_domain }}:9345
+{% if ( rke2_node_type == 'agent') or ((rke2_server_ha == True) and (rke2_first_server != True)) %}
+server: https://{{ rke2_api_domain }}:9345
+{% endif %}
 token: {{ rke2_token }}
 tls-san:
-  - {{ site_rke2_api_domain }}
-  - {{ site_rke2_api_ip }}
+  - {{ rke2_api_domain }}
+  - {{ rke2_api_ip }}
 cni: {{ rke2_cni }}
+{% if ((rke2_node_taint is defined) and (rke2_node_taint == True)) %}
+node-taint:
+  - "CriticalAddonsOnly=true:NoExecute"
+{% endif %}
+{% if (rke2_disable is defined) and (rke2_node_type == 'server') %}
+disable: {{rke2_disable}}
+{% endif %}

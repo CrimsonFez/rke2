@@ -15,7 +15,7 @@
     group: root
     mode: 0644
   notify:
-    - Restart RKE2 Server
+    - crimsonfez.rke2 : Restart RKE2 Server
 
 - name: Start RKE2 service on the first server
   ansible.builtin.systemd:

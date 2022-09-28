@@ -13,7 +13,7 @@
     state: present
     extra_zfs_properties:
       mountpoint: /var/lib/rancher/rke2/agent/containerd/io.containerd.snapshotter.v1.zfs
-  when: (rke2_snapshotter == zfs)
+  when: (rke2_containerd_snapshotter == zfs)
 
 - name: Copy RKE2 config
   ansible.builtin.template:

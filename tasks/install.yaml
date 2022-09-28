@@ -1,21 +1,6 @@
 ---
-- name: Download RKE2 installation script
-  ansible.builtin.get_url:
-    url: "{{ rke2_install_bash_url }}"
-    dest: "{{ rke2_install_script_dir }}/rke2-install.sh"
-    mode: 0700
-
 - name: Populate service facts
   ansible.builtin.service_facts:
-
-- name: Get stats of the FS object
-  ansible.builtin.stat:
-    path: /usr/local
-  register: usr_local
-
-- name: Set RKE2 bin path
-  set_fact:
-    rke2_bin_path: "{{ '/usr/local/bin/rke2' if  usr_local.stat.writeable == True else ' /opt/rke2/bin/rke2' }}"
 
 - name: Check RKE2 version
   ansible.builtin.shell: |
@@ -26,6 +11,24 @@
   changed_when: false
   register: installed_rke2_version
   when: '"rke2-server.service" in ansible_facts.services or "rke2-agent.service" in ansible_facts.services'
+
+- name: Download RKE2 installation script
+  ansible.builtin.get_url:
+    url: "{{ rke2_install_bash_url }}"
+    dest: "{{ rke2_install_script_dir }}/rke2-install.sh"
+    mode: 0700
+  when: installed_rke2_version is defined
+
+- name: Get stats of the FS object
+  ansible.builtin.stat:
+    path: /usr/local
+  register: usr_local
+  when: installed_rke2_version is defined
+
+- name: Set RKE2 bin path
+  set_fact:
+    rke2_bin_path: "{{ '/usr/local/bin/rke2' if  usr_local.stat.writeable == True else ' /opt/rke2/bin/rke2' }}"
+  when: installed_rke2_version is defined
 
 - name: Run RKE2 script
   ansible.builtin.command:

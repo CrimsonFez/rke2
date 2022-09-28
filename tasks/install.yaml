@@ -2,6 +2,10 @@
 - name: Populate service facts
   ansible.builtin.service_facts:
 
+- name: Set RKE2 bin path
+  set_fact:
+    rke2_bin_path: "{{ '/usr/local/bin/rke2' if  usr_local.stat.writeable == True else ' /opt/rke2/bin/rke2' }}"
+
 - name: Check RKE2 version
   ansible.builtin.shell: |
     set -o pipefail
@@ -23,11 +27,6 @@
   ansible.builtin.stat:
     path: /usr/local
   register: usr_local
-  when: installed_rke2_version is defined
-
-- name: Set RKE2 bin path
-  set_fact:
-    rke2_bin_path: "{{ '/usr/local/bin/rke2' if  usr_local.stat.writeable == True else ' /opt/rke2/bin/rke2' }}"
   when: installed_rke2_version is defined
 
 - name: Run RKE2 script

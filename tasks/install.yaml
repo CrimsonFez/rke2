@@ -26,7 +26,7 @@
     url: "{{ rke2_install_bash_url }}"
     dest: "{{ rke2_install_script_dir }}/rke2-install.sh"
     mode: 0700
-  when: installed_rke2_version is defined
+  when: (rke2_version != ( installed_rke2_version.stdout | default({}))) or (installed_rke2_version is not defined)
 
 - name: Run RKE2 script
   ansible.builtin.command:

@@ -3,10 +3,8 @@
   ansible.builtin.service:
     name: rke2-agent
     state: restarted
-  when: '"rke2_node_type" == agent'
 
 - name: Restart RKE2 Server
   ansible.builtin.service:
     name: rke2-server
     state: restarted
-  when: '"rke2_node_type" == server'

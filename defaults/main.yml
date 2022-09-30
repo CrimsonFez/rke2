@@ -8,7 +8,11 @@ rke2_data_path: /var/lib/rancher/rke2
 # when set to true this sets the proper taints on server nodes
 rke2_server_ha: False
 rke2_token: SuperSecretPassword!
-rke2_cni: canal
+rke2_cni: 
+  cni:
+    - canal
 rke2_api_domain: cluster.local
 rke2_api_ip: 192.168.100.100
-rke2_disable: 'rke2-ingress-nginx' 
+rke2_disable:
+  disable:
+    - rke2-ingress-nginx

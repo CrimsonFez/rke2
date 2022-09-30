@@ -3,17 +3,32 @@ write-kubeconfig-mode: "0644"
 server: https://{{ rke2_api_domain }}:9345
 {% endif %}
 token: {{ rke2_token }}
+{# server specific #}
+{% if rke2_node_type == 'server'%}
 tls-san:
   - {{ rke2_api_domain }}
   - {{ rke2_api_ip }}
-cni: {{ rke2_cni }}
+{% if rke2_cni is defined%}
+cni:
+{% for cni in rke2_cni %}
+  - {{cni}}
+{% endfor %}
+{% endif %}
+{% if rke2_disable is defined%}
+disable:
+{% for line in rke2_disable %}
+  - {{line}}
+{% endfor %}
+{% endif %}
+{% endif %}
+{# end server specific #}
 {% if ((rke2_node_taint is defined) and (rke2_node_taint == True)) %}
 node-taint:
   - "CriticalAddonsOnly=true:NoExecute"
 {% endif %}
-{% if (rke2_disable is defined) and (rke2_node_type == 'server') %}
-disable: {{rke2_disable}}
-{% endif %}
 {% if rke2_containerd_snapshotter is defined %}
 snapshotter: {{rke2_containerd_snapshotter}}
 {% endif %}
+{% if rke2_node_ip is defined%}
+node-ip: {{rke2_node_ip}}
+{% endif%}

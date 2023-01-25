@@ -20,6 +20,12 @@ disable:
   - {{line}}
 {% endfor %}
 {% endif %}
+{% if rke2_kube_api_server_args is defined %}
+kube-apiserver-arg:
+{% for item in rke2_kube_api_server_args %}
+  - "{{item}}"
+{% endfor %}
+{% endif %}
 {% endif %}
 {# end server specific #}
 {% if ((rke2_node_taint is defined) and (rke2_node_taint == True)) %}

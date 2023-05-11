@@ -33,6 +33,10 @@ Role Variables
 > rke2_api_domain: cluster.local \
 > rke2_api_ip: 192.168.100.100
 
+### disabling the kube proxy for when running eBPF based CNI like cillium or calico eBPF
+
+> rke2_disable_kube_proxy: true
+
 # The following variables are applied to nodes
 ### choose the node type
 > rke2_node_type: 'server' \

@@ -26,6 +26,9 @@ kube-apiserver-arg:
   - "{{item}}"
 {% endfor %}
 {% endif %}
+{% if rke2_disable_kube_proxy is defined and rke2_disable_kube_proxy is sameas true%}
+disable-kube-proxy: true
+{% endif %}
 {% endif %}
 {# end server specific #}
 {% if ((rke2_node_taint is defined) and (rke2_node_taint == True)) %}

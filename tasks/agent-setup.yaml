@@ -26,6 +26,27 @@
   notify:
     - "crimsonfez.rke2 : Restart RKE2 Agent"
 
+- name: "Configure Containerd `[plugins.cri] device_ownership_from_security_context`: Configure Template"
+  community.general.ini_file:
+    path: /var/lib/rancher/rke2/agent/etc/containerd/config.toml.tmpl
+    section: plugins.cri
+    option: device_ownership_from_security_context
+    value: "true"
+    state: "{{ rke2_containerd_device_ownership_from_security_context | ternary('present', 'absent') }}"
+- name: "Configure Containerd `[plugins.cri] device_ownership_from_security_context`: Get Running Configuration"
+  fetch:
+    src: /var/lib/rancher/rke2/agent/etc/containerd/config.toml
+    dest: /tmp/ansible-remote-containerd-config
+- name: "Configure Containerd `[plugins.cri] device_ownership_from_security_context`: Set Facts"
+  set_fact:
+    rke2_containerd_device_ownership_from_security_context_current_value: "{{ lookup( 'ini', 'device_ownership_from_security_context section=plugins.cri file=/tmp/ansible-remote-containerd-config/{{ inventory_hostname }}/var/lib/rancher/rke2/agent/etc/containerd/config.toml') }}"
+- name: "Configure Containerd `[plugins.cri] device_ownership_from_security_context`: Detect Difference"
+  assert: { that: true, quiet: true }
+  changed_when: true
+  when: rke2_containerd_device_ownership_from_security_context_current_value != (rke2_containerd_device_ownership_from_security_context | ternary(true, ''))
+  #notify:
+    #- "crimsonfez.rke2 : Restart RKE2 Agent"
+
 - name: Start RKE2 agent service
   ansible.builtin.systemd:
     name: "rke2-agent.service"

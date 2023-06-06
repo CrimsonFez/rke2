@@ -16,3 +16,4 @@ rke2_api_ip: 192.168.100.100
 rke2_disable:
   disable:
     - rke2-ingress-nginx
+rke2_containerd_device_ownership_from_security_context: false

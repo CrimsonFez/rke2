@@ -37,6 +37,10 @@ Role Variables
 
 > rke2_disable_kube_proxy: true
 
+### Enable Containerd Configuration option device_ownership_from_security_context
+
+> rke2_containerd_device_ownership_from_security_context: true
+
 # The following variables are applied to nodes
 ### choose the node type
 > rke2_node_type: 'server' \

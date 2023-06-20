@@ -41,6 +41,10 @@ Role Variables
 
 > rke2_containerd_device_ownership_from_security_context: true
 
+### Change cluster domain
+
+> rke2_cluster_domain: domain.example.net
+
 # The following variables are applied to nodes
 ### choose the node type
 > rke2_node_type: 'server' \

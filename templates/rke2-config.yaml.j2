@@ -19,6 +19,9 @@ disable:
 {% for line in rke2_disable %}
   - {{line}}
 {% endfor %}
+{% if rke2_cluster_domain is defined%}
+cluster-domain: {{ rke2_cluster_domain }}
+{% endif %}
 {% endif %}
 {% if rke2_kube_api_server_args is defined %}
 kube-apiserver-arg:

@@ -3,6 +3,9 @@
 - name: Download and install RKE2 {{ rke2_version }}
   ansible.builtin.include_tasks: install.yaml
 
+- name: Configure Volume for Containerd
+  ansible.builtin.include_tasks: containerd-volume.yaml
+
 - name: Create RKE2 Config Directory
   ansible.builtin.file:
     state: directory
@@ -22,6 +25,5 @@
   notify:
     - "crimsonfez.rke2 : Restart RKE2"
 
-- name: Setup RKE2 Agents
-  ansible.builtin.include_tasks: agent-setup.yaml
-  when: rke2_node_type == 'agent'
+- name: Configure Containerd
+  ansible.builtin.include_tasks: config-containerd.yaml

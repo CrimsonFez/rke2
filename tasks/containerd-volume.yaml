@@ -1,0 +1,23 @@
+---
+- name: Setup ZFS Subvol
+  community.general.zfs:
+    name: "{{rke2_containerd_snapshotter_volume}}"
+    state: present
+    extra_zfs_properties:
+      mountpoint: /var/lib/rancher/rke2/agent/containerd/io.containerd.snapshotter.v1.zfs
+  when: rke2_containerd_snapshotter == "zfs" and rke2_containerd_snapshotter_volume is defined
+
+- name: Create containerd directory
+  ansible.builtin.file:
+    state: directory
+    path: /var/lib/rancher/rke2/agent/containerd
+  when: rke2_containerd_snapshotter == "overlayfs" and rke2_containerd_snapshotter_volume is defined
+
+- name: Mount contaionerd volume
+  ansible.posix.mount:
+    backup: true
+    fstype: ext4
+    path: /var/lib/rancher/rke2/agent/containerd
+    src: "{{rke2_containerd_snapshotter_volume}}"
+    state: mounted
+  when: rke2_containerd_snapshotter == "overlayfs" and rke2_containerd_snapshotter_volume is defined  

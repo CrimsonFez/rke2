@@ -1,0 +1,16 @@
+---
+- name: "Configure Containerd: Create tmpl"
+  ansible.builtin.copy:
+    remote_src: true
+    src: /var/lib/rancher/rke2/agent/etc/containerd/config.toml
+    dest: /var/lib/rancher/rke2/agent/etc/containerd/config.toml.tmpl
+    backup: true
+
+- name: "Configure Containerd `[plugins.cri] device_ownership_from_security_context`: Modify tmpl"
+  ansible.builtin.lineinfile:
+    line: "  device_ownership_from_security_context = true"
+    insertafter: '\[plugins.\"io.containerd.grpc.v1.cri\"\]'
+    path: /var/lib/rancher/rke2/agent/etc/containerd/config.toml.tmpl
+    state: "{{ rke2_containerd_device_ownership_from_security_context | ternary('present', 'absent') }}"
+  notify:
+    - "crimsonfez.rke2 : Restart RKE2"

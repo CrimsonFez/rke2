@@ -1,13 +1,7 @@
 ---
 # handlers file for rke2
-- name: Restart RKE2 Agent
+- name: Restart RKE2
   ansible.builtin.service:
-    name: rke2-agent
-    state: restarted
-  when: rke2_restart
-
-- name: Restart RKE2 Server
-  ansible.builtin.service:
-    name: rke2-server
+    name: "rke2-{{ rke2_node_type }}"
     state: restarted
   when: rke2_restart

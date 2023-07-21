@@ -3,9 +3,24 @@
 - name: Download and install RKE2 {{ rke2_version }}
   ansible.builtin.include_tasks: install.yaml
 
-- name: Setup RKE2 Servers
-  ansible.builtin.include_tasks: server-setup.yaml
-  when: rke2_node_type == 'server'
+- name: Create RKE2 Config Directory
+  ansible.builtin.file:
+    state: directory
+    path: /etc/rancher/rke2
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Copy RKE2 config
+  ansible.builtin.template:
+    src: "rke2-config.yaml.j2"
+    dest: /etc/rancher/rke2/config.yaml
+    owner: root
+    group: root
+    mode: 0644
+    backup: true
+  notify:
+    - "crimsonfez.rke2 : Restart RKE2"
 
 - name: Setup RKE2 Agents
   ansible.builtin.include_tasks: agent-setup.yaml

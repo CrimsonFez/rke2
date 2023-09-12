@@ -77,6 +77,12 @@ rke2_containerd_snapshotter_volume: /dev/mapper/containerd
 
 # Modify containerd config
 rke2_containerd_device_ownership_from_security_context: true
+
+# Defaults that shouldn't be changed
+rke2_install_script_dir: /var/tmp
+rke2_install_bash_url: https://get.rke2.io
+rke2_data_path: /var/lib/rancher/rke2
+rke2_tls_san_security: "true"
 ```
 
 Example Inventory
